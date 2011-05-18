@@ -15,33 +15,30 @@ package org.sonatype.aether.util.graph;
 import org.sonatype.aether.graph.DependencyNode;
 
 /**
- * Generates a sequence of dependency nodes from a dependeny graph by traversing the graph in preorder.
+ * Generates a sequence of dependency nodes from a dependeny graph by traversing the graph in preorder. This visitor visits each
+ * node exactly once regardless how many paths within the dependency graph lead to the node such that the resulting node sequence
+ * is free of duplicates.
  *
  * @author Benjamin Bentmann
  */
 public class PreorderNodeListGenerator
-    extends AbstractDepthFirstNodeListGenerator
-{
-    @Override
-    public boolean visitEnter( DependencyNode node )
-    {
-        if ( ensureVisitedFlagIsSet( node ) == VisitStatus.WAS_VISITED_BEFORE )
-        {
-            return false;
-        }
+    extends AbstractDepthFirstNodeListGenerator {
 
-        if ( node.getDependency() != null )
-        {
-            nodes.add( node );
-        }
-
-        return true;
+  @Override
+  public boolean visitEnter(DependencyNode node) {
+    if (ensureVisitedFlagIsSet(node) == VisitStatus.WAS_VISITED_BEFORE) {
+      return false;
     }
 
-    @Override
-    public boolean visitLeave( DependencyNode node )
-    {
-        return true;
+    if (node.getDependency() != null) {
+      nodes.add(node);
     }
 
+    return true;
+  }
+
+  @Override
+  public boolean visitLeave(DependencyNode node) {
+    return true;
+  }
 }
